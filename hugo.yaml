@@ -50,7 +50,7 @@ params:
   ShowCodeLineNumbers: true
   ShowToc: true
   TocOpen: false
-  ShowShareButtons: true
+  ShowShareButtons: false
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   disableScrollToTop: false

@@ -46,6 +46,10 @@ body {
     padding-top: 36px;
 }
 
+.main:has(> article.post-single) {
+    --main-width: 880px;
+}
+
 .first-entry.home-info {
     min-height: 0;
     margin: 12px 0 36px;
