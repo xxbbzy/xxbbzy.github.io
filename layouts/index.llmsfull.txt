@@ -1,0 +1,13 @@
+# Brent Xu 的运维知识库（全文版）
+
+> 个人运维知识库博客：运维工作中的笔记与经验沉淀。站点地址：https://xxbbzy.github.io/
+{{- range where .Site.RegularPages.ByDate.Reverse "Section" "posts" }}
+
+---
+
+## {{ .Title }}
+
+URL: {{ .Permalink }}
+
+{{ .Plain }}
+{{- end }}

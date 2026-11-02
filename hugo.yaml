@@ -1,0 +1,63 @@
+baseURL: "https://xxbbzy.github.io/"
+locale: "zh-CN"
+defaultContentLanguage: "zh-cn"
+hasCJKLanguage: true
+title: "Brent Xu 的运维知识库"
+theme: "PaperMod"
+timeZone: "Asia/Shanghai"
+
+enableRobotsTXT: true
+
+taxonomies:
+  tag: tags
+  category: categories
+
+outputs:
+  home: ["HTML", "RSS", "JSON", "llms", "llmsfull"]
+
+outputFormats:
+  llms:
+    mediaType: "text/plain"
+    baseName: "llms"
+    isPlainText: true
+    notAlternative: true
+  llmsfull:
+    mediaType: "text/plain"
+    baseName: "llms-full"
+    isPlainText: true
+    notAlternative: true
+
+menu:
+  main:
+    - name: "首页"
+      url: "/"
+      weight: 1
+    - name: "归档"
+      url: "/archives/"
+      weight: 2
+    - name: "标签"
+      url: "/tags/"
+      weight: 3
+    - name: "关于"
+      url: "/about/"
+      weight: 4
+
+params:
+  defaultTheme: auto
+  disableThemeToggle: false
+  ShowReadingTime: true
+  ShowWordCount: true
+  ShowCodeLineNumbers: true
+  ShowToc: true
+  TocOpen: false
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  homeInfoParams:
+    Title: "Brent Xu 的运维知识库"
+    Content: "运维工作中的笔记与经验沉淀：Linux、网络、容器、自动化，以及 homelab 折腾记录。文章持续更新。"
+
+markup:
+  highlight:
+    style: github
+    lineNos: false

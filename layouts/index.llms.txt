@@ -1,0 +1,14 @@
+# Brent Xu 的运维知识库
+
+> 个人运维知识库博客：运维工作中的笔记与经验沉淀。站点地址：https://xxbbzy.github.io/
+
+## 文章
+{{- range where .Site.RegularPages.ByDate.Reverse "Section" "posts" }}
+- [{{ .Title }}]({{ .Permalink }}){{ with .Params.summary }}：{{ . }}{{ end }}
+{{- end }}
+
+## 说明
+
+- 全文版见 llms-full.txt。
+- RSS 订阅：https://xxbbzy.github.io/index.xml
+- 站内搜索索引：https://xxbbzy.github.io/index.json
