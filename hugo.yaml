@@ -53,6 +53,13 @@ params:
   ShowShareButtons: true
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
+  disableScrollToTop: false
+  socialIcons:
+    - name: github
+      title: GitHub
+      url: "https://github.com/xxbbzy"
+  assets:
+    favicon: "/favicon.svg"
   homeInfoParams:
     Title: "Brent Xu 的运维知识库"
     Content: "运维工作中的笔记与经验沉淀：Linux、网络、容器、自动化，以及 homelab 折腾记录。文章持续更新。"

@@ -1,0 +1,304 @@
+/* PaperMod loads extended CSS after its core styles. All surface and accent
+   colors derive from the theme tokens, including the no-JavaScript fallback. */
+:root {
+    --main-width: 780px;
+    --radius: 16px;
+    --kb-accent: var(--primary);
+    --kb-line: var(--tertiary);
+    --kb-wash: var(--code-bg);
+    --kb-shadow: transparent;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+    :root {
+        --kb-accent: color-mix(in srgb, var(--primary) 78%, teal);
+        --kb-line: color-mix(in srgb, var(--primary) 18%, var(--theme));
+        --kb-wash: color-mix(in srgb, var(--kb-accent) 6%, var(--theme));
+        --kb-shadow: color-mix(in srgb, var(--primary) 7%, transparent);
+    }
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+
+.list {
+    background: var(--theme);
+}
+
+.header {
+    border-bottom: 1px solid var(--border);
+}
+
+.logo a {
+    font-size: 19px;
+    letter-spacing: -0.025em;
+}
+
+.menu a:hover,
+.menu .active {
+    color: var(--kb-accent);
+    text-underline-offset: 0.5em;
+}
+
+.main {
+    padding-top: 36px;
+}
+
+.first-entry.home-info {
+    min-height: 0;
+    margin: 12px 0 36px;
+    padding: clamp(24px, 5vw, 48px);
+    gap: 18px;
+    border: 1px solid var(--kb-line);
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--kb-wash), var(--entry));
+    box-shadow: 0 12px 36px var(--kb-shadow);
+}
+
+.home-info::before {
+    content: "";
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--kb-accent);
+}
+
+.home-info .entry-header {
+    display: block;
+    overflow: visible;
+}
+
+.home-info .entry-header h1 {
+    max-width: 14em;
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.3;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+}
+
+.home-info .entry-content {
+    max-width: 38em;
+    color: var(--content);
+    font-size: 16px;
+    line-height: 1.95;
+}
+
+.home-info .entry-content p {
+    margin: 0;
+}
+
+.home-info .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid var(--kb-line);
+    border-radius: 50%;
+    color: var(--kb-accent);
+    background: var(--entry);
+}
+
+.home-info .social-icons a:first-of-type {
+    padding-inline-start: 10px;
+}
+
+.home-info .social-icons a:hover {
+    background: var(--kb-wash);
+    border-color: var(--kb-accent);
+}
+
+.post-entry {
+    padding: clamp(22px, 4vw, 32px);
+    border-color: var(--kb-line);
+    box-shadow: 0 4px 16px var(--kb-shadow);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.post-entry:hover,
+.post-entry:focus-within {
+    transform: translateY(-3px);
+    border-color: var(--kb-accent);
+    box-shadow: 0 10px 28px var(--kb-shadow);
+}
+
+.post-entry .entry-header h2 {
+    font-size: clamp(21px, 3vw, 25px);
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+}
+
+.post-entry .entry-content {
+    margin: 12px 0 20px;
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+.post-entry .entry-footer {
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    line-height: 1.8;
+    font-variant-numeric: tabular-nums;
+}
+
+.post-title {
+    margin-bottom: 18px;
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.35;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+}
+
+.post-meta {
+    line-height: 1.9;
+}
+
+.post-content {
+    font-size: 17px;
+    line-height: 1.95;
+}
+
+.post-content :is(h1, h2, h3, h4, h5, h6) {
+    line-height: 1.45;
+    scroll-margin-top: 24px;
+}
+
+.post-content h1 { font-size: 2em; }
+.post-content h2 {
+    margin-top: 2em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--kb-line);
+    font-size: 1.65em;
+}
+.post-content h3 { font-size: 1.3em; }
+.post-content h4 { font-size: 1.12em; }
+.post-content h5 { font-size: 1em; }
+.post-content h6 { font-size: 0.92em; color: var(--secondary); }
+
+.post-content a:not(.anchor) {
+    color: var(--kb-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    overflow-wrap: anywhere;
+}
+
+.post-content a:not(.anchor):hover {
+    text-decoration-thickness: 2px;
+}
+
+.post-content code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
+        "Liberation Mono", "Microsoft YaHei", monospace;
+    font-size: 0.85em;
+}
+
+.post-content :not(pre) > code {
+    padding: 0.15em 0.4em;
+    color: var(--kb-accent);
+    border: 1px solid var(--kb-line);
+    border-radius: 5px;
+    box-decoration-break: clone;
+}
+
+/* The configured github highlighter emits fixed inline colors. Normalize its
+   palette to theme tokens so code remains readable in both color schemes. */
+.post-content .highlight,
+.post-content .highlight pre,
+.post-content pre code {
+    color: var(--content) !important;
+    background: var(--code-bg) !important;
+    border-radius: 12px;
+}
+
+.post-content .highlight span[style] {
+    color: inherit !important;
+}
+
+.post-content .highlight,
+.post-content > pre {
+    border: 1px solid var(--kb-line);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.post-content pre code {
+    padding: 20px;
+    line-height: 1.75;
+    word-break: normal;
+    tab-size: 4;
+}
+
+.post-content table:not(.highlight table) {
+    border: 1px solid var(--kb-line);
+    border-radius: 10px;
+    font-size: 0.9em;
+}
+
+.post-content table:not(.highlight table) :is(th, td) {
+    padding: 12px 16px;
+    border-color: var(--kb-line);
+}
+
+.post-content table:not(.highlight table) th {
+    background: var(--kb-wash);
+    color: var(--primary);
+}
+
+.post-content table:not(.highlight table) tbody tr:nth-child(even) {
+    background: var(--code-bg);
+}
+
+.post-content blockquote {
+    margin: 28px 0;
+    padding: 18px 22px;
+    border-inline-start: 3px solid var(--kb-accent);
+    border-radius: 0 12px 12px 0;
+    color: var(--content);
+    background: var(--kb-wash);
+}
+
+.post-content hr {
+    width: 72px;
+    height: 2px;
+    margin: 44px auto;
+    background: var(--kb-line);
+}
+
+.toc {
+    border-color: var(--kb-line);
+}
+
+.footer {
+    margin-top: 28px;
+    border-top: 1px solid var(--border);
+    line-height: 2;
+}
+
+.top-link {
+    color: var(--primary);
+    background: var(--entry);
+    border: 1px solid var(--kb-line);
+    box-shadow: 0 4px 16px var(--kb-shadow);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--kb-accent);
+    outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+    .main { padding-top: 18px; }
+    .logo a { font-size: 17px; }
+    .first-entry.home-info { margin-top: 6px; border-radius: 18px; }
+    .post-content { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .post-entry { transition: none; }
+    .post-entry:hover,
+    .post-entry:focus-within { transform: none; }
+}
