@@ -46,10 +46,6 @@ body {
     padding-top: 36px;
 }
 
-.main:has(> article.post-single) {
-    --main-width: 880px;
-}
-
 .first-entry.home-info {
     min-height: 0;
     margin: 12px 0 36px;
@@ -305,4 +301,117 @@ summary:focus-visible {
     .post-entry { transition: none; }
     .post-entry:hover,
     .post-entry:focus-within { transform: none; }
+}
+
+/* Article sidebars: border-box widths include padding and borders. */
+.main:has(> .post-layout) {
+    --main-width: 880px;
+}
+
+.post-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--gap);
+}
+
+.post-layout > .post-single {
+    flex: 0 1 880px;
+    max-width: 880px;
+    min-width: 0;
+}
+
+.post-sidebar {
+    display: none;
+    flex: 0 0 200px;
+    min-width: 0;
+    padding: calc(var(--gap) / 2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--entry);
+    color: var(--secondary);
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.post-sidebar h2 {
+    margin-bottom: calc(var(--gap) / 2);
+    color: var(--primary);
+    font-size: 16px;
+}
+
+.post-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.post-sidebar li + li {
+    margin-top: 8px;
+}
+
+.post-sidebar ul ul {
+    padding-inline-start: calc(var(--gap) / 2);
+    margin-top: 8px;
+}
+
+.post-sidebar a {
+    display: block;
+}
+
+.post-sidebar a:hover,
+.post-sidebar a[aria-current="location"] {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.post-sidebar a[aria-current="location"] {
+    font-weight: 600;
+}
+
+.post-sidebar section + section {
+    margin-top: var(--gap);
+    padding-top: var(--gap);
+    border-top: 1px solid var(--border);
+}
+
+.sidebar-tag-count {
+    color: var(--secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 1080px) {
+    .main:has(> .post-layout) {
+        --main-width: 1440px;
+    }
+
+    .post-sidebar-toc {
+        display: block;
+        position: sticky;
+        top: calc(var(--header-height) + var(--gap));
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
+    }
+}
+
+@media (min-width: 1400px) {
+    .post-sidebar-related {
+        display: block;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .post-sidebar,
+    .post-sidebar * {
+        animation: none;
+        transition: none;
+        scroll-behavior: auto;
+    }
+}
+
+@media print {
+    .post-layout > .post-sidebar {
+        display: none;
+    }
 }

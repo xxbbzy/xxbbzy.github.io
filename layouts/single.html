@@ -1,0 +1,149 @@
+{{- define "main" }}
+
+{{- $isPost := eq .Type "posts" }}
+<div class="post-layout">
+{{- if $isPost }}
+  {{- if findRE "<a " .TableOfContents }}
+  <aside class="post-sidebar post-sidebar-toc" aria-labelledby="sidebar-toc-title">
+    <h2 id="sidebar-toc-title">目录</h2>
+    {{ .TableOfContents }}
+  </aside>
+  {{- end }}
+{{- end }}
+
+<article class="post-single">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h1>
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description }}
+    </div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta">
+      {{- partial "post_meta.html" . -}}
+      {{- partial "translation_list.html" . -}}
+      {{- partial "edit_post.html" . -}}
+      {{- partial "post_canonical.html" . -}}
+    </div>
+    {{- end }}
+  </header>
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+  {{- if (.Param "ShowToc") }}
+  {{- partial "toc.html" . }}
+  {{- end }}
+
+  {{- if .Content }}
+  <div class="post-content md-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{- partial "extend_post_content.html" . }}
+
+  <footer class="post-footer">
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    <ul class="post-tags">
+      {{- range ($.GetTerms $tags) }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- partial "post_nav_links.html" . }}
+    {{- end }}
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
+  </footer>
+
+  {{- if (.Param "comments") }}
+  {{- partial "comments.html" . }}
+  {{- end }}
+</article>
+
+{{- if $isPost }}
+  {{- $posts := where .Site.RegularPages "Type" "posts" }}
+  {{- $others := where $posts "RelPermalink" "ne" .RelPermalink }}
+  {{- $related := first 4 ($others.Related (dict "document" . "indices" (slice "tags"))) }}
+  {{- if lt (len $related) 2 }}
+    {{- range $others.ByDate.Reverse }}
+      {{- if and (lt (len $related) 2) (not (in $related .)) }}
+        {{- $related = $related | append . }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- $tags := .Site.Taxonomies.tags.ByCount }}
+  {{- if or $related $tags }}
+  <aside class="post-sidebar post-sidebar-related" aria-label="相关内容">
+    {{- with $related }}
+    <section aria-labelledby="sidebar-related-title">
+      <h2 id="sidebar-related-title">相关文章</h2>
+      <ul>
+        {{- range . }}
+        <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+    {{- with $tags }}
+    <section aria-labelledby="sidebar-tags-title">
+      <h2 id="sidebar-tags-title">全部标签</h2>
+      <ul>
+        {{- range . }}
+        <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span class="sidebar-tag-count">({{ .Count }})</span></a></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </aside>
+  {{- end }}
+{{- end }}
+</div>
+{{- if $isPost }}
+<script>
+(() => {
+  const toc = document.querySelector('.post-sidebar-toc');
+  if (!toc || !('IntersectionObserver' in window)) return;
+  const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
+  const headings = links.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter(Boolean);
+  if (!headings.length) return;
+  const visible = new Set();
+  const activate = heading => {
+    links.forEach(link => {
+      if (decodeURIComponent(link.hash.slice(1)) === heading.id) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  };
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) visible.add(entry.target);
+      else visible.delete(entry.target);
+    });
+    const current = headings.find(heading => visible.has(heading))
+      || headings.filter(heading => heading.getBoundingClientRect().top <= 110).pop()
+      || headings[0];
+    activate(current);
+  }, { rootMargin: '-84px 0px -55% 0px', threshold: 0 });
+  headings.forEach(heading => observer.observe(heading));
+})();
+</script>
+{{- end }}
+
+{{- end }}{{/* end main */}}
