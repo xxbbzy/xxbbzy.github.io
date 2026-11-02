@@ -398,6 +398,10 @@ summary:focus-visible {
 @media (min-width: 1400px) {
     .post-sidebar-related {
         display: block;
+        position: sticky;
+        top: calc(var(--header-height) + var(--gap));
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
     }
 }
 
