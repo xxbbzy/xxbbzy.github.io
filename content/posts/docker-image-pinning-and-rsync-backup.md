@@ -42,7 +42,14 @@ Docker Compose 里写 `latest` 或者只写大版本号，初次部署没问题�
 image: cturra/ntp@sha256:<digest>
 ```
 
-`digest` 是镜像内容的哈希，拉到的永远是同一个构建。写法上可以在旁边用注释记下当时的 `latest` 对应关系，方便日后看懂。
+`digest` 从哪里来？先拉取再查看，不要凭空拼：
+
+```bash
+docker pull cturra/ntp:latest
+docker images --digests cturra/ntp
+```
+
+`DIGEST` 列显示的就是 `sha256:...`，复制到 Compose 里。也可以不拉取直接查询：`docker buildx imagetools inspect cturra/ntp:latest`，输出里同样有 digest。拿到之后顺手记下当时 `latest` 对应的日期，方便日后看懂。
 
 即使有版本标签，digest 也更彻底：同一个标签事后可能被重新构建推送。核对时就遇到过 `redmine:6.1.3` 的 digest 是较旧的构建、仓库里后来又重建了同一标签的情况。标签锁定解决“大概是哪个版本”，digest 锁定解决“精确是哪一次构建”。按需选用，不必所有服务都上 digest。
 
@@ -57,10 +64,11 @@ image: cturra/ntp@sha256:<digest>
 
 镜像本身不需要备份：标签或 digest 锁好了，重新 `pull` 就能拿回同样的镜像。
 
-用 `rsync --link-dest` 做增量快照：每次备份生成一个完整目录，未变化的文件用硬链接指向上一次快照，磁盘占用只算新增和变化的部分，看起来是全量、用起来是增量。示意（路径用占位符，替换成实际路径）：
+用 `rsync --link-dest` 做增量快照：每次备份生成一个完整目录，未变化的文件用硬链接指向上一次快照，磁盘占用只算新增和变化的部分，看起来是全量、用起来是增量。快照目录按日期命名，`--link-dest` 指向上一份快照。以下为示例路径，换成自己的实际路径：
 
 ```bash
-rsync -a --delete --link-dest=<上一次快照目录> <源目录>/ <本次快照目录>/
+rsync -a --delete --link-dest=/mnt/nfs/backup/docker/2026-11-02 \
+  /srv/docker/ /mnt/nfs/backup/docker/2026-11-03/
 ```
 
 备份任务交给 systemd 定时器自动跑，保留期 2–4 周，过期快照按时间顺序删除。备份目的地放在独立的存储上（例如 NAS 上的 NFS 共享），不要和源数据放在同一块盘上。

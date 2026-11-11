@@ -82,7 +82,7 @@ Get-Service sshd
 New-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -DisplayName "OpenSSH SSH Server (Inbound)" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 22
 ```
 
-如果只想让局域网访问，可以在规则上加 `-RemoteAddress` 限定来源网段（用局域网段替换占位符），不要放行到整个互联网。需要撤销时，用同一名称删除：
+如果只想让局域网访问，可以在规则上加 `-RemoteAddress` 限定来源网段，只放行自己的局域网段，不要放行到整个互联网。需要撤销时，用同一名称删除：
 
 ```powershell
 Remove-NetFirewallRule -Name "OpenSSH-Server-In-TCP"
